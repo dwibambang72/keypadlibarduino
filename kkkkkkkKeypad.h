@@ -33,11 +33,18 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
-#include "Key.h"
+#include "utility/Key.h"
+
+// Arduino versioning.
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
 // bperrybap - Thanks for a well reasoned argument and the following macro(s).
 // See http://arduino.cc/forum/index.php/topic,142041.msg1069480.html#msg1069480
-/*#ifndef INPUT_PULLUP
+#ifndef INPUT_PULLUP
 #warning "Using  pinMode() INPUT_PULLUP AVR emulation"
 #define INPUT_PULLUP 0x2
 #define pinMode(_pin, _mode) _mypinMode(_pin, _mode)
@@ -50,7 +57,7 @@ do {							 \
 		pinMode(_pin, _mode);	 \
 }while(0)
 #endif
-*/
+
 
 #define OPEN LOW
 #define CLOSED HIGH
@@ -77,7 +84,7 @@ public:
 
 	Keypad(char *userKeymap, byte *row, byte *col, byte numRows, byte numCols);
 
-	virtual void pin_mode(byte pinNum, byte mode) { pinMode(pinNum, (WiringPinMode)mode); }
+	virtual void pin_mode(byte pinNum, byte mode) { pinMode(pinNum, mode); }
 	virtual void pin_write(byte pinNum, boolean level) { digitalWrite(pinNum, level); }
 	virtual int  pin_read(byte pinNum) { return digitalRead(pinNum); }
 
